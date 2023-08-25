@@ -5,7 +5,7 @@ import (
 	"erp/api/middlewares"
 	config "erp/config"
 	constants "erp/constants"
-	"erp/infrastructure"
+	"erp/infrastructure/db"
 	models "erp/models"
 	"fmt"
 
@@ -19,7 +19,7 @@ func NewServerGroup(instance *gin.Engine) *gin.RouterGroup {
 	return instance.Group("/api")
 }
 
-func NewServer(lifecycle fx.Lifecycle, zap *zap.Logger, config *config.Config, db *infrastructure.Database, middlewares *middlewares.GinMiddleware) *gin.Engine {
+func NewServer(lifecycle fx.Lifecycle, zap *zap.Logger, config *config.Config, db *db.Database, middlewares *middlewares.GinMiddleware) *gin.Engine {
 	switch config.Server.Env {
 	case constants.Dev, constants.Local:
 		gin.SetMode(gin.DebugMode)
@@ -66,7 +66,7 @@ func NewServer(lifecycle fx.Lifecycle, zap *zap.Logger, config *config.Config, d
 	return instance
 }
 
-func SeedRoutes(engine *gin.Engine, db *infrastructure.Database) error {
+func SeedRoutes(engine *gin.Engine, db *db.Database) error {
 	// Seed routes
 	routes := []models.Routes{}
 

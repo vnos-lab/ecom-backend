@@ -1,5 +1,11 @@
 package infrastructure
 
-import "go.uber.org/fx"
+import (
+	"erp/infrastructure/cache"
+	"erp/infrastructure/db"
+	"erp/infrastructure/search"
 
-var Module = fx.Options(fx.Provide(NewDatabase))
+	"go.uber.org/fx"
+)
+
+var Module = fx.Options(fx.Provide(db.NewDatabase), fx.Provide(search.NewSearchClient), fx.Provide(cache.NewCacheClient))

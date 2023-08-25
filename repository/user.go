@@ -3,7 +3,7 @@ package repository
 import (
 	"context"
 	api_errors "erp/api_errors"
-	"erp/infrastructure"
+	"erp/infrastructure/db"
 	models "erp/models"
 	"fmt"
 
@@ -17,10 +17,10 @@ type UserRepository interface {
 }
 
 type userRepositoryImpl struct {
-	*infrastructure.Database
+	*db.Database
 }
 
-func NewUserRepository(db *infrastructure.Database) UserRepository {
+func NewUserRepository(db *db.Database) UserRepository {
 	if db == nil {
 		panic("Database engine is null")
 	}

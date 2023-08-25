@@ -3,6 +3,7 @@ package service
 import (
 	"context"
 	config "erp/config"
+	"erp/infrastructure/cache"
 	models "erp/models"
 	repository "erp/repository"
 
@@ -16,21 +17,23 @@ type (
 		GetByEmail(ctx context.Context, email string) (*models.User, error)
 	}
 	UserServiceImpl struct {
-		userRepo repository.UserRepository
-		config   *config.Config
+		userRepo    repository.UserRepository
+		cacheClient *cache.Client
+		config      *config.Config
 	}
 )
+
+func NewUserService(itemRepo repository.UserRepository, config *config.Config, cacheClient *cache.Client) UserService {
+	return &UserServiceImpl{
+		userRepo:    itemRepo,
+		cacheClient: cacheClient,
+		config:      config,
+	}
+}
 
 func (u *UserServiceImpl) Create(ctx context.Context, user models.User) (*models.User, error) {
 	r, err := u.userRepo.Create(ctx, user)
 	return r, err
-}
-
-func NewUserService(itemRepo repository.UserRepository, config *config.Config) UserService {
-	return &UserServiceImpl{
-		userRepo: itemRepo,
-		config:   config,
-	}
 }
 
 func (u *UserServiceImpl) GetByEmail(ctx context.Context, email string) (*models.User, error) {

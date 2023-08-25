@@ -25,6 +25,7 @@ type (
 		Database       Database `mapstructure:"database"`
 		Logger         Logger   `mapstructure:"logger"`
 		Jwt            Jwt      `mapstructure:"jwt"`
+		Redis          Redis    `mapstructure:"redis"`
 	}
 
 	Server struct {
@@ -53,6 +54,16 @@ type (
 		Level  string `mapstructure:"level"`
 		Format string `mapstructure:"format"`
 		Prefix string `mapstructure:"prefix"`
+	}
+
+	Redis struct {
+		Host         string `mapstructure:"host"`
+		Port         int    `mapstructure:"port"`
+		Password     string `mapstructure:"password"`
+		PoolSize     int    `mapstructure:"poolSize"`
+		MinIdleConns int    `mapstructure:"minIdleConns"`
+		DB           int    `mapstructure:"db"`
+		Name         string `mapstructure:"name"`
 	}
 
 	Services struct {
