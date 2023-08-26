@@ -1,14 +1,14 @@
 package bootstrap
 
 import (
-	controller "erp/api/controllers"
-	"erp/api/middlewares"
-	config "erp/config"
-	infrastructure "erp/infrastructure"
-	lib "erp/lib"
-	repository "erp/repository"
-	service "erp/service"
-	utils "erp/utils"
+	controller "ecom/api/controllers"
+	"ecom/api/middlewares"
+	config "ecom/config"
+	infrastructure "ecom/infrastructure"
+	lib "ecom/lib"
+	repository "ecom/repository"
+	service "ecom/service"
+	utils "ecom/utils"
 
 	"go.uber.org/fx"
 	"go.uber.org/fx/fxevent"

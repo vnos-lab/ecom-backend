@@ -1,7 +1,7 @@
 package cache
 
 import (
-	"erp/config"
+	"ecom/config"
 
 	"github.com/redis/go-redis/v9"
 	"go.uber.org/zap"

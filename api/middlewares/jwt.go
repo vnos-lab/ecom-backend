@@ -1,11 +1,11 @@
 package middlewares
 
 import (
-	"erp/api/response"
-	"erp/api_errors"
-	config "erp/config"
-	constants "erp/constants"
-	"erp/infrastructure/db"
+	"ecom/api/response"
+	"ecom/api_errors"
+	config "ecom/config"
+	constants "ecom/constants"
+	"ecom/infrastructure/db"
 	"net/http"
 	"strings"
 

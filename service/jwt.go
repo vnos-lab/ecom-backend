@@ -1,10 +1,10 @@
 package service
 
 import (
-	"erp/api_errors"
-	config "erp/config"
-	"erp/constants"
-	"erp/domain"
+	"ecom/api_errors"
+	config "ecom/config"
+	"ecom/constants"
+	"ecom/domain"
 	"time"
 
 	"github.com/golang-jwt/jwt"

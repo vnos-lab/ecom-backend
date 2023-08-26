@@ -2,10 +2,10 @@ package postgres
 
 import (
 	"context"
-	"erp/domain"
-	"erp/infrastructure/db"
-	"erp/models"
-	"erp/utils"
+	"ecom/domain"
+	"ecom/infrastructure/db"
+	"ecom/models"
+	"ecom/utils"
 	"fmt"
 )
 

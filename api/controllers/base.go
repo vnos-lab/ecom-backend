@@ -1,7 +1,7 @@
 package controller
 
 import (
-	"erp/api/response"
+	"ecom/api/response"
 	"net/http"
 
 	"github.com/gin-gonic/gin"

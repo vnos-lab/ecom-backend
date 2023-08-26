@@ -1,7 +1,7 @@
 package db
 
 import (
-	config "erp/config"
+	config "ecom/config"
 	"fmt"
 	"time"
 

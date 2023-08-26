@@ -1,6 +1,6 @@
 package domain
 
-import "erp/constants"
+import "ecom/constants"
 
 type JwtService interface {
 	GenerateToken(userID string, tokenType constants.TokenType, expiresIn int64) (string, error)

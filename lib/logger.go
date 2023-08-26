@@ -1,8 +1,8 @@
 package lib
 
 import (
-	config "erp/config"
-	constants "erp/constants"
+	config "ecom/config"
+	constants "ecom/constants"
 	"log"
 	"os"
 	"time"

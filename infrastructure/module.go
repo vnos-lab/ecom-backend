@@ -1,9 +1,9 @@
 package infrastructure
 
 import (
-	"erp/infrastructure/cache"
-	"erp/infrastructure/db"
-	"erp/infrastructure/search"
+	"ecom/infrastructure/cache"
+	"ecom/infrastructure/db"
+	"ecom/infrastructure/search"
 
 	"go.uber.org/fx"
 )

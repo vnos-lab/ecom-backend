@@ -2,11 +2,11 @@ package lib
 
 import (
 	"context"
-	"erp/api/middlewares"
-	config "erp/config"
-	constants "erp/constants"
-	"erp/infrastructure/db"
-	"erp/utils"
+	"ecom/api/middlewares"
+	config "ecom/config"
+	constants "ecom/constants"
+	"ecom/infrastructure/db"
+	"ecom/utils"
 	"fmt"
 
 	"github.com/gin-gonic/gin"

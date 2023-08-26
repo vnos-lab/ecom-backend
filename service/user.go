@@ -2,11 +2,11 @@ package service
 
 import (
 	"context"
-	config "erp/config"
-	"erp/domain"
-	"erp/infrastructure/cache"
-	models "erp/models"
-	"erp/utils"
+	config "ecom/config"
+	"ecom/domain"
+	"ecom/infrastructure/cache"
+	models "ecom/models"
+	"ecom/utils"
 )
 
 type (

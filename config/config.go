@@ -1,7 +1,7 @@
 package config
 
 import (
-	constants "erp/constants"
+	constants "ecom/constants"
 	"fmt"
 	"os"
 

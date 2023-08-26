@@ -2,9 +2,9 @@ package service
 
 import (
 	"context"
-	config "erp/config"
-	"erp/domain"
-	models "erp/models"
+	config "ecom/config"
+	"ecom/domain"
+	models "ecom/models"
 
 	"golang.org/x/crypto/bcrypt"
 )

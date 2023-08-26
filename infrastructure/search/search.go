@@ -1,7 +1,7 @@
 package search
 
 import (
-	"erp/config"
+	"ecom/config"
 
 	"github.com/RediSearch/redisearch-go/redisearch"
 	"github.com/gomodule/redigo/redis"

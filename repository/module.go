@@ -1,7 +1,7 @@
 package repository
 
 import (
-	"erp/repository/postgres"
+	"ecom/repository/postgres"
 
 	"go.uber.org/fx"
 )

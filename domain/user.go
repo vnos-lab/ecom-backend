@@ -2,7 +2,7 @@ package domain
 
 import (
 	"context"
-	"erp/models"
+	"ecom/models"
 )
 
 type UserRepository interface {

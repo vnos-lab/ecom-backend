@@ -1,7 +1,7 @@
 package main
 
 import (
-	"erp/config"
+	"ecom/config"
 	"fmt"
 	"log"
 

@@ -1,7 +1,7 @@
 package controller
 
 import (
-	"erp/domain"
+	"ecom/domain"
 
 	"github.com/gin-gonic/gin"
 	"go.uber.org/zap"

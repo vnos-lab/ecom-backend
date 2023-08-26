@@ -3,7 +3,7 @@ package constants
 type Platform string
 
 const (
-	Erp Platform = "erp/"
+	Erp Platform = "ecom/"
 	Web Platform = "web"
 	App Platform = "app"
 )
