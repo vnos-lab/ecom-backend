@@ -3,27 +3,21 @@ package service
 import (
 	"context"
 	config "erp/config"
+	"erp/domain"
 	"erp/infrastructure/cache"
 	models "erp/models"
-	repository "erp/repository"
-
-	"gorm.io/gorm"
+	"erp/utils"
 )
 
 type (
-	UserService interface {
-		Create(ctx context.Context, user models.User) (*models.User, error)
-		GetByID(ctx context.Context, id string) (*models.User, error)
-		GetByEmail(ctx context.Context, email string) (*models.User, error)
-	}
 	UserServiceImpl struct {
-		userRepo    repository.UserRepository
+		userRepo    domain.UserRepository
 		cacheClient *cache.Client
 		config      *config.Config
 	}
 )
 
-func NewUserService(itemRepo repository.UserRepository, config *config.Config, cacheClient *cache.Client) UserService {
+func NewUserService(itemRepo domain.UserRepository, config *config.Config, cacheClient *cache.Client) domain.UserService {
 	return &UserServiceImpl{
 		userRepo:    itemRepo,
 		cacheClient: cacheClient,
@@ -39,7 +33,7 @@ func (u *UserServiceImpl) Create(ctx context.Context, user models.User) (*models
 func (u *UserServiceImpl) GetByEmail(ctx context.Context, email string) (*models.User, error) {
 	user, err := u.userRepo.GetByEmail(ctx, email)
 	if err != nil {
-		if err == gorm.ErrRecordNotFound {
+		if utils.ErrNoRows(err) {
 			return user, err
 		}
 		return nil, err
@@ -50,7 +44,7 @@ func (u *UserServiceImpl) GetByEmail(ctx context.Context, email string) (*models
 func (u *UserServiceImpl) GetByID(ctx context.Context, id string) (user *models.User, err error) {
 	user, err = u.userRepo.GetByID(ctx, id)
 	if err != nil {
-		if err == gorm.ErrRecordNotFound {
+		if utils.ErrNoRows(err) {
 			return user, err
 		}
 		return nil, err

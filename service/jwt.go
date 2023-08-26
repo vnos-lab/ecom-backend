@@ -4,22 +4,17 @@ import (
 	"erp/api_errors"
 	config "erp/config"
 	"erp/constants"
+	"erp/domain"
 	"time"
 
 	"github.com/golang-jwt/jwt"
 )
 
-type JwtService interface {
-	GenerateToken(userID string, tokenType constants.TokenType, expiresIn int64) (string, error)
-	ValidateToken(token string, tokenType constants.TokenType) (*string, error)
-	GenerateAuthTokens(userID string) (string, string, error)
-}
-
 type jwtService struct {
 	config *config.Config
 }
 
-func NewJwtService(config *config.Config) JwtService {
+func NewJwtService(config *config.Config) domain.JwtService {
 	return &jwtService{
 		config: config,
 	}

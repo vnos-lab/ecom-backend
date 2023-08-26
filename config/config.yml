@@ -17,6 +17,11 @@ database:
   username: 'erp-dev'
   password: 'erp-dev'
   name: 'erp-dev'
+  sslmode: 'disable'
+  maxOpenConnections: 10
+  maxIdleConnections: 5
+  maxConnectionLifetime: 300
+  timezone: 'Asia/Ho_Chi_Minh'
 
 jwt:
   secret: 'hgG6T23XD25N'

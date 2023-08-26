@@ -1,8 +1,7 @@
 package controller
 
 import (
-	dto "erp/dto/auth"
-	service "erp/service"
+	"erp/domain"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -10,12 +9,12 @@ import (
 )
 
 type AuthController struct {
-	AuthService service.AuthService
+	AuthService domain.AuthService
 	logger      *zap.Logger
 	BaseController
 }
 
-func NewAuthController(c *gin.RouterGroup, authService service.AuthService, logger *zap.Logger) *AuthController {
+func NewAuthController(c *gin.RouterGroup, authService domain.AuthService, logger *zap.Logger) *AuthController {
 	controller := &AuthController{
 		AuthService: authService,
 		logger:      logger,
@@ -28,7 +27,7 @@ func NewAuthController(c *gin.RouterGroup, authService service.AuthService, logg
 }
 
 func (b *AuthController) Register(c *gin.Context) {
-	var req dto.RegisterRequest
+	var req domain.RegisterRequest
 
 	if err := c.ShouldBindJSON(&req); err != nil {
 		b.ResponseError(c, http.StatusBadRequest, []error{err})
@@ -45,7 +44,7 @@ func (b *AuthController) Register(c *gin.Context) {
 }
 
 func (b *AuthController) Login(c *gin.Context) {
-	var req dto.LoginRequest
+	var req domain.LoginRequest
 
 	if err := c.ShouldBindJSON(&req); err != nil {
 		b.ResponseError(c, http.StatusBadRequest, []error{err})

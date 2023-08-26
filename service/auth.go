@@ -2,28 +2,22 @@ package service
 
 import (
 	"context"
-	"erp/api_errors"
 	config "erp/config"
-	"erp/constants"
-	dto "erp/dto/auth"
+	"erp/domain"
 	models "erp/models"
 
 	"golang.org/x/crypto/bcrypt"
 )
 
 type (
-	AuthService interface {
-		Register(ctx context.Context, req dto.RegisterRequest) (user *models.User, err error)
-		Login(ctx context.Context, req dto.LoginRequest) (res *dto.LoginResponse, err error)
-	}
 	AuthServiceImpl struct {
-		userService UserService
-		jwtService  JwtService
+		userService domain.UserService
+		jwtService  domain.JwtService
 		config      *config.Config
 	}
 )
 
-func NewAuthService(userService UserService, config *config.Config, jwtService JwtService) AuthService {
+func NewAuthService(userService domain.UserService, config *config.Config, jwtService domain.JwtService) domain.AuthService {
 	return &AuthServiceImpl{
 		userService: userService,
 		jwtService:  jwtService,
@@ -31,12 +25,11 @@ func NewAuthService(userService UserService, config *config.Config, jwtService J
 	}
 }
 
-func (a *AuthServiceImpl) Register(ctx context.Context, req dto.RegisterRequest) (user *models.User, err error) {
-	roleKey := constants.RoleCustomer
+func (a *AuthServiceImpl) Register(ctx context.Context, req domain.RegisterRequest) (user *models.User, err error) {
 
-	if req.RequestFrom != string(constants.Web) {
-		roleKey = constants.RoleStoreOwner
-	}
+	// if req.RequestFrom != string(constants.Web) {
+	// 	roleKey = constants.RoleStoreOwner
+	// }
 
 	encryptedPassword, err := bcrypt.GenerateFromPassword(
 		[]byte(req.Password),
@@ -53,21 +46,19 @@ func (a *AuthServiceImpl) Register(ctx context.Context, req dto.RegisterRequest)
 		Password:  req.Password,
 		FirstName: req.FirstName,
 		LastName:  req.LastName,
-		RoleKey:   roleKey,
 	})
 
 	return user, err
 }
 
-func (a *AuthServiceImpl) Login(ctx context.Context, req dto.LoginRequest) (res *dto.LoginResponse, err error) {
+func (a *AuthServiceImpl) Login(ctx context.Context, req domain.LoginRequest) (res *domain.LoginResponse, err error) {
 	user, err := a.userService.GetByEmail(ctx, req.Email)
 
-	if req.RequestFrom != string(constants.Web) {
-		// TODO: Sẽ có thêm role của nhân viên
-		if user.RoleKey != constants.RoleStoreOwner {
-			return nil, api_errors.ErrUnauthorizedAccess
-		}
-	}
+	// if req.RequestFrom != string(constants.Web) {
+	// 	if user.RoleKey != constants.RoleStoreOwner {
+	// 		return nil, api_errors.ErrUnauthorizedAccess
+	// 	}
+	// }
 
 	if err != nil {
 		return nil, err
@@ -84,15 +75,14 @@ func (a *AuthServiceImpl) Login(ctx context.Context, req dto.LoginRequest) (res 
 		return nil, err
 	}
 
-	res = &dto.LoginResponse{
-		User: dto.UserResponse{
+	res = &domain.LoginResponse{
+		User: domain.UserResponse{
 			ID:        user.ID.String(),
 			FirstName: user.FirstName,
 			LastName:  user.LastName,
 			Email:     user.Email,
-			RoleKey:   user.RoleKey,
 		},
-		Token: dto.TokenResponse{
+		Token: domain.TokenResponse{
 			AccessToken:  accessToken,
 			RefreshToken: refreshToken,
 			ExpiresIn:    a.config.Jwt.AccessTokenExpiresIn,

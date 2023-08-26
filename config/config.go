@@ -36,12 +36,17 @@ type (
 	}
 
 	Database struct {
-		Driver   string `mapstructure:"driver"`
-		Host     string `mapstructure:"host"`
-		Port     int    `mapstructure:"port"`
-		Username string `mapstructure:"username"`
-		Password string `mapstructure:"password"`
-		Name     string `mapstructure:"name"`
+		Driver             string `mapstructure:"driver"`
+		Host               string `mapstructure:"host"`
+		Port               int    `mapstructure:"port"`
+		Username           string `mapstructure:"username"`
+		Password           string `mapstructure:"password"`
+		Name               string `mapstructure:"name"`
+		MaxOpenConnections int    `mapstructure:"maxOpenConnections"`
+		MaxIdleConnections int    `mapstructure:"maxIdleConnections"`
+		ConnMaxLifetime    int    `mapstructure:"connMaxLifetime"`
+		TimeZone           string `mapstructure:"timeZone"`
+		SSLMode            string `mapstructure:"sslMode"`
 	}
 
 	Jwt struct {

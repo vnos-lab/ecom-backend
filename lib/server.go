@@ -6,7 +6,7 @@ import (
 	config "erp/config"
 	constants "erp/constants"
 	"erp/infrastructure/db"
-	models "erp/models"
+	"erp/utils"
 	"fmt"
 
 	"github.com/gin-gonic/gin"
@@ -67,22 +67,17 @@ func NewServer(lifecycle fx.Lifecycle, zap *zap.Logger, config *config.Config, d
 }
 
 func SeedRoutes(engine *gin.Engine, db *db.Database) error {
-	// Seed routes
-	routes := []models.Routes{}
-
 	// Delete all routes
-	db.DB.Delete(&routes, "1=1")
-
+	db.DB.MustExec("DELETE FROM routes")
+	qb := utils.Psql().Insert("routes").Columns("method", "path")
+	args := []interface{}{}
 	for _, r := range engine.Routes() {
-		routes = append(routes, models.Routes{
-			Method: r.Method,
-			Path:   r.Path,
-		})
+		qb = qb.Values(r.Method, r.Path)
+		args = append(args, r.Method, r.Path)
 	}
+	query, _, _ := qb.ToSql()
+	fmt.Println(query)
 
-	err := db.DB.Create(&routes).Error
-	if err != nil {
-		panic(err)
-	}
+	db.DB.MustExecContext(context.Background(), query, args...)
 	return nil
 }
