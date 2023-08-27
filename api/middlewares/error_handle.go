@@ -7,7 +7,7 @@ import (
 
 func (e *GinMiddleware) ErrorHandler(logger *zap.Logger) gin.HandlerFunc {
 	return func(c *gin.Context) {
-
+		logger.Debug("Error handler middleware")
 		c.Next()
 		if len(c.Errors) > 0 {
 			logger.Error("Error", zap.String("Error", c.Errors.String()))

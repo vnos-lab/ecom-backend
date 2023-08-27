@@ -9,14 +9,14 @@ import (
 )
 
 type AuthController struct {
-	AuthService domain.AuthService
-	logger      *zap.Logger
 	BaseController
+	authService domain.AuthService
+	logger      *zap.Logger
 }
 
 func NewAuthController(c *gin.RouterGroup, authService domain.AuthService, logger *zap.Logger) *AuthController {
 	controller := &AuthController{
-		AuthService: authService,
+		authService: authService,
 		logger:      logger,
 	}
 	g := c.Group("/auth")
@@ -30,12 +30,11 @@ func (b *AuthController) Register(c *gin.Context) {
 	var req domain.RegisterRequest
 
 	if err := c.ShouldBindJSON(&req); err != nil {
-		b.ResponseError(c, err)
+		b.ResponseValidationError(c, err)
 		return
 	}
 
-	_, err := b.AuthService.Register(c.Request.Context(), req)
-
+	_, err := b.authService.Register(c.Request.Context(), req)
 	if err != nil {
 		b.ResponseError(c, err)
 		return
@@ -47,11 +46,11 @@ func (b *AuthController) Login(c *gin.Context) {
 	var req domain.LoginRequest
 
 	if err := c.ShouldBindJSON(&req); err != nil {
-		b.ResponseError(c, err)
+		b.ResponseValidationError(c, err)
 		return
 	}
 
-	res, err := b.AuthService.Login(c.Request.Context(), req)
+	res, err := b.authService.Login(c.Request.Context(), req)
 
 	if err != nil {
 		b.ResponseError(c, err)

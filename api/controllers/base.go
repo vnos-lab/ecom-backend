@@ -3,9 +3,11 @@ package controller
 import (
 	"ecom/api/response"
 	"ecom/api_errors"
+	"errors"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
+	"github.com/go-playground/validator/v10"
 )
 
 type BaseController struct {
@@ -33,6 +35,18 @@ func (b *BaseController) ResponseError(c *gin.Context, err error) {
 	}
 
 	c.AbortWithStatusJSON(status, response.ResponseError{
+		Message: err.Error(),
+		Error:   err,
+	})
+}
+
+func (b *BaseController) ResponseValidationError(c *gin.Context, err error) {
+	var ve validator.ValidationErrors
+	if errors.As(err, &ve) {
+		err = errors.New(ve[0].Field() + " is " + ve[0].Tag())
+	}
+
+	c.AbortWithStatusJSON(http.StatusUnprocessableEntity, response.ResponseError{
 		Message: err.Error(),
 		Error:   err,
 	})

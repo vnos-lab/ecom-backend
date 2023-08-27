@@ -38,11 +38,11 @@ func NewServer(lifecycle fx.Lifecycle, zap *zap.Logger, config *config.Config, d
 
 	//instance.Use(gozap.RecoveryWithZap(zap, true))
 
+	instance.Use(middlewares.CORS)
 	instance.Use(middlewares.ErrorHandler(zap))
 	instance.Use(middlewares.JSONMiddleware)
-	instance.Use(middlewares.CORS)
 	instance.Use(middlewares.Logger(zap))
-	instance.Use(middlewares.JWT(config, db))
+	// instance.Use(middlewares.JWT(config, db))
 
 	lifecycle.Append(fx.Hook{
 		OnStart: func(ctx context.Context) error {
@@ -76,7 +76,6 @@ func SeedRoutes(engine *gin.Engine, db *db.Database) error {
 		args = append(args, r.Method, r.Path)
 	}
 	query, _, _ := qb.ToSql()
-	fmt.Println(query)
 
 	db.DB.MustExecContext(context.Background(), query, args...)
 	return nil

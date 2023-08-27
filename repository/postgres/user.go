@@ -14,9 +14,7 @@ type userRepository struct {
 }
 
 func NewUserRepository(db *db.Database) domain.UserRepository {
-	if db == nil {
-		panic("Database engine is null")
-	}
+	utils.ErrNilDb(db)
 	return &userRepository{db}
 }
 
