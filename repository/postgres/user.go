@@ -46,8 +46,6 @@ func (u *userRepository) GetByID(ctx context.Context, id string) (res *models.Us
 
 func (u *userRepository) GetByEmail(ctx context.Context, email string) (*models.User, error) {
 	query, _, _ := utils.Psql().Select("*").From("users").Where("email = ?", email).Limit(1).ToSql()
-	fmt.Println(query)
-
 	uu := models.User{}
 
 	err := u.Get(&uu, query, email)

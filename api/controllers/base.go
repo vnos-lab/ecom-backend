@@ -2,6 +2,7 @@ package controller
 
 import (
 	"ecom/api/response"
+	"ecom/api_errors"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -25,16 +26,14 @@ func (b *BaseController) ResponseList(c *gin.Context, message string, total *int
 	})
 }
 
-func (b *BaseController) ResponseError(c *gin.Context, statusCode int, errs []error) {
-
-	errorStrings := make([]error, len(errs))
-	for i, err := range errs {
-		c.Error(err)
-		errorStrings[i] = err
+func (b *BaseController) ResponseError(c *gin.Context, err error) {
+	status, ok := api_errors.MapErrorStatusCode[err.Error()]
+	if !ok {
+		status = http.StatusInternalServerError
 	}
 
-	c.AbortWithStatusJSON(statusCode, response.ResponseError{
-		Message: errs[0].Error(),
-		Errors:  errorStrings,
+	c.AbortWithStatusJSON(status, response.ResponseError{
+		Message: err.Error(),
+		Error:   err,
 	})
 }

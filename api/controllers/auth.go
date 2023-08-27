@@ -30,14 +30,14 @@ func (b *AuthController) Register(c *gin.Context) {
 	var req domain.RegisterRequest
 
 	if err := c.ShouldBindJSON(&req); err != nil {
-		b.ResponseError(c, http.StatusBadRequest, []error{err})
+		b.ResponseError(c, err)
 		return
 	}
 
 	_, err := b.AuthService.Register(c.Request.Context(), req)
 
 	if err != nil {
-		b.ResponseError(c, http.StatusBadRequest, []error{err})
+		b.ResponseError(c, err)
 		return
 	}
 	b.Response(c, http.StatusOK, "success", nil)
@@ -47,14 +47,14 @@ func (b *AuthController) Login(c *gin.Context) {
 	var req domain.LoginRequest
 
 	if err := c.ShouldBindJSON(&req); err != nil {
-		b.ResponseError(c, http.StatusBadRequest, []error{err})
+		b.ResponseError(c, err)
 		return
 	}
 
 	res, err := b.AuthService.Login(c.Request.Context(), req)
 
 	if err != nil {
-		b.ResponseError(c, http.StatusBadRequest, []error{err})
+		b.ResponseError(c, err)
 		return
 	}
 	b.Response(c, http.StatusOK, "success", res)

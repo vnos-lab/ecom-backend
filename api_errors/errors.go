@@ -12,6 +12,7 @@ var (
 	ErrTokenExpired         = errors.New("token expired")
 	ErrTokenInvalid         = errors.New("token invalid")
 	ErrTokenMalformed       = errors.New("token malformed")
+	ErrUserNotFound         = errors.New("user not found")
 )
 
 func GetStatusCode(err error) (int, bool) {
@@ -22,12 +23,12 @@ func GetStatusCode(err error) (int, bool) {
 	}
 }
 
-const (
-	InternalServerError = "internal Server Error"
-	UserNotFound        = "user not found"
-)
-
 var MapErrorStatusCode = map[string]int{
-	InternalServerError: http.StatusInternalServerError,
-	UserNotFound:        http.StatusNotFound,
+	ErrInternalServerError.Error():  http.StatusInternalServerError,
+	ErrUnauthorizedAccess.Error():   http.StatusUnauthorized,
+	ErrTokenBadSignedMethod.Error(): http.StatusUnauthorized,
+	ErrTokenExpired.Error():         http.StatusUnauthorized,
+	ErrTokenInvalid.Error():         http.StatusUnauthorized,
+	ErrTokenMalformed.Error():       http.StatusUnauthorized,
+	ErrUserNotFound.Error():         http.StatusNotFound,
 }

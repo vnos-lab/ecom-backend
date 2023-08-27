@@ -2,18 +2,16 @@ package response
 
 type ResponseError struct {
 	//Code    int      `json:"code"`
-	Message string  `json:"message"`
-	Errors  []error `json:"errors,omitempty"`
+	Message string `json:"message"`
+	Error   error  `json:"errors,omitempty"`
 }
 
 type SimpleResponse struct {
-	//Code    int         `json:"code"`
 	Message string      `json:"message"`
 	Data    interface{} `json:"data,omitempty"`
 }
 
 type SimpleResponseList struct {
-	//Code    int         `json:"code"`
 	Message string      `json:"message"`
 	Data    interface{} `json:"data,omitempty"`
 	Total   *int64      `json:"total"`

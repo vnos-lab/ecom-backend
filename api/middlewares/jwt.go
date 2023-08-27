@@ -21,7 +21,7 @@ func (e *GinMiddleware) JWT(config *config.Config, db *db.Database) gin.HandlerF
 			resError := func() {
 				c.AbortWithStatusJSON(http.StatusUnauthorized, response.ResponseError{
 					Message: "Unauthorized",
-					Errors:  []error{api_errors.ErrUnauthorizedAccess},
+					Error:   api_errors.ErrUnauthorizedAccess,
 				})
 			}
 
