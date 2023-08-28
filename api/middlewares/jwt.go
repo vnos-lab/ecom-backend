@@ -1,10 +1,10 @@
 package middlewares
 
 import (
+	"context"
 	"ecom/api/response"
 	"ecom/api_errors"
 	config "ecom/config"
-	constants "ecom/constants"
 	"ecom/infrastructure/db"
 	"net/http"
 	"strings"
@@ -15,52 +15,70 @@ import (
 
 func (e *GinMiddleware) JWT(config *config.Config, db *db.Database) gin.HandlerFunc {
 	return func(c *gin.Context) {
-		if config.Server.Env != constants.Dev && constants.Local != config.Server.Env {
-			auth := c.Request.Header.Get("Authorization")
-
-			resError := func() {
-				c.AbortWithStatusJSON(http.StatusUnauthorized, response.ResponseError{
-					Message: "Unauthorized",
-					Error:   api_errors.ErrUnauthorizedAccess,
-				})
-			}
-
-			if auth == "" {
-				resError()
-				return
-			}
-			jwtToken := strings.Split(auth, " ")[1]
-			if jwtToken == "" {
-				resError()
-				return
-			}
-
-			token, err := parseToken(jwtToken, config.Jwt.Secret)
-			if err != nil {
-				resError()
-				return
-			}
-
-			claims, OK := token.Claims.(jwt.MapClaims)
-			if !OK {
-				resError()
-				return
-			}
-
-			_, OK = claims["sub"].(string)
-			if !OK {
-				resError()
-				return
-			}
-
-			// user, err := userRepo.GetByID(c, claimedUID)
-			// if err != nil {
-			// 	resError()
-			// 	return
-			// }
-
-			// c.Set("user", user)
+		// TODO: add public routes in config
+		publicRoutes := []string{
+			"/api/auth/login",
+			"/api/auth/register",
 		}
+
+		for _, route := range publicRoutes {
+			if route == c.Request.URL.Path {
+				c.Next()
+				return
+			}
+		}
+
+		auth := c.Request.Header.Get("Authorization")
+
+		resError := func() {
+			c.AbortWithStatusJSON(http.StatusUnauthorized, response.ResponseError{
+				Message: "Unauthorized",
+				Error:   api_errors.ErrUnauthorizedAccess,
+			})
+		}
+
+		if auth == "" {
+			c.AbortWithStatusJSON(http.StatusUnauthorized, response.ResponseError{
+				Message: "Unauthorized",
+				Error:   api_errors.ErrUnauthorizedAccess,
+			})
+			return
+		}
+		jwtToken := strings.Split(auth, " ")[1]
+
+		if jwtToken == "" {
+			c.AbortWithStatusJSON(http.StatusUnauthorized, response.ResponseError{
+				Message: "JWT token is missing",
+				Error:   api_errors.ErrUnauthorizedAccess,
+			})
+			return
+		}
+
+		token, err := parseToken(jwtToken, config.Jwt.Secret)
+		if err != nil {
+			c.AbortWithStatusJSON(http.StatusUnauthorized, response.ResponseError{
+				Message: err.Error(),
+				Error:   api_errors.ErrUnauthorizedAccess,
+			})
+			return
+		}
+
+		claims, OK := token.Claims.(jwt.MapClaims)
+		if !OK {
+			c.AbortWithStatusJSON(http.StatusUnauthorized, response.ResponseError{
+				Message: err.Error(),
+				Error:   api_errors.ErrUnauthorizedAccess,
+			})
+			return
+		}
+
+		userID, OK := claims["sub"].(string)
+		if !OK {
+			resError()
+			return
+		}
+		c.Request = c.Request.WithContext(context.WithValue(c.Request.Context(), "x-user-id", userID))
+
 		c.Next()
 	}
 }

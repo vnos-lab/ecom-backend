@@ -8,22 +8,25 @@ import (
 	"time"
 
 	"github.com/golang-jwt/jwt"
+	"go.uber.org/zap"
 )
 
 type jwtService struct {
 	config *config.Config
+	logger *zap.Logger
 }
 
-func NewJwtService(config *config.Config) domain.JwtService {
+func NewJwtService(config *config.Config, logger *zap.Logger) domain.JwtService {
 	return &jwtService{
 		config: config,
+		logger: logger,
 	}
 }
 
 func (j *jwtService) GenerateToken(userID string, tokenType constants.TokenType, expiresIn int64) (string, error) {
 	claims := jwt.StandardClaims{
 		Subject:   userID,
-		ExpiresAt: time.Now().Add(time.Duration(expiresIn)).Unix(),
+		ExpiresAt: time.Now().Add(time.Duration(expiresIn) * time.Second).Unix(),
 		IssuedAt:  time.Now().Unix(),
 		Issuer:    "erp",
 	}

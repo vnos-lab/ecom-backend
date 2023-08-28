@@ -9,4 +9,5 @@ import (
 var Module = fx.Provide(
 	postgres.NewUserRepository,
 	postgres.NewProductRepository,
+	postgres.NewVariantRepository,
 )
