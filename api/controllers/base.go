@@ -30,12 +30,22 @@ func (b *BaseController) ResponseList(c *gin.Context, message string, total *int
 
 func (b *BaseController) ResponseError(c *gin.Context, err error) {
 	status, ok := api_errors.MapErrorStatusCode[err.Error()]
+	message := err.Error()
+	ginType := gin.ErrorTypePublic
 	if !ok {
 		status = http.StatusInternalServerError
+		ginType = gin.ErrorTypePrivate
+		message = api_errors.ErrOcurred.Error()
 	}
 
+	c.Errors = append(c.Errors, &gin.Error{
+		Err:  err,
+		Type: ginType,
+		Meta: status,
+	})
+
 	c.AbortWithStatusJSON(status, response.ResponseError{
-		Message: err.Error(),
+		Message: message,
 		Error:   err,
 	})
 }

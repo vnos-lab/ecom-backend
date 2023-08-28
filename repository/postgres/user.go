@@ -7,6 +7,8 @@ import (
 	"ecom/models"
 	"ecom/utils"
 	"fmt"
+
+	"github.com/pkg/errors"
 )
 
 type userRepository struct {
@@ -14,7 +16,7 @@ type userRepository struct {
 }
 
 func NewUserRepository(db *db.Database) domain.UserRepository {
-	utils.ErrNilDb(db)
+	utils.MustHaveDb(db)
 	return &userRepository{db}
 }
 
@@ -29,7 +31,7 @@ func (u *userRepository) Create(ctx context.Context, user models.User) (res *mod
 
 	_, err = u.ExecContext(ctx, query, args...)
 
-	return &user, err
+	return &user, errors.WithStack(err)
 }
 
 func (u *userRepository) GetByID(ctx context.Context, id string) (res *models.User, err error) {
@@ -37,7 +39,7 @@ func (u *userRepository) GetByID(ctx context.Context, id string) (res *models.Us
 
 	err = u.SelectContext(ctx, &res, query)
 	if err != nil {
-		return nil, err
+		return nil, errors.WithStack(err)
 	}
 	return
 }
@@ -48,5 +50,5 @@ func (u *userRepository) GetByEmail(ctx context.Context, email string) (*models.
 
 	err := u.Get(&uu, query, email)
 
-	return &uu, err
+	return &uu, errors.WithStack(err)
 }

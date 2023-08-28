@@ -1,31 +1,21 @@
 package middlewares
 
 import (
+	"fmt"
+
 	"github.com/gin-gonic/gin"
 	"go.uber.org/zap"
 )
 
 func (e *GinMiddleware) ErrorHandler(logger *zap.Logger) gin.HandlerFunc {
 	return func(c *gin.Context) {
-		logger.Debug("Error handler middleware")
 		c.Next()
 		if len(c.Errors) > 0 {
-			logger.Error("Error", zap.String("Error", c.Errors.String()))
-			//var message string
-			//statusCode := http.StatusInternalServerError
-			//err := c.Errors.Last()
-			//
-			//if err.IsType(gin.ErrorTypePrivate) {
-			//	message = utils.ErrInternalServerError.Error()
-			//} else {
-			//	message = err.Error()
-			//	statusCode = err.Meta.(int)
-			//}
-			//c.JSON(statusCode, dto.ResponseError{
-			//	Message: message,
-			//	Errors:  c.Errors.Errors(),
-			//})
-			//return
+			if c.Errors.Last().Type != gin.ErrorTypePublic {
+				logger.WithOptions(zap.AddStacktrace(zap.DPanicLevel)).Error(fmt.Sprintf("Error when handling request: %+v", c.Errors.Last().Err))
+			} else {
+				logger.WithOptions(zap.AddStacktrace(zap.DPanicLevel)).Warn(fmt.Sprintf("Error when handling request: %+v", c.Errors.Last().Err))
+			}
 		}
 	}
 }

@@ -13,6 +13,7 @@ var (
 	ErrTokenInvalid         = errors.New("token invalid")
 	ErrTokenMalformed       = errors.New("token malformed")
 	ErrUserNotFound         = errors.New("user not found")
+	ErrOcurred              = errors.New("an error has ocurred")
 )
 
 func GetStatusCode(err error) (int, bool) {
@@ -31,4 +32,5 @@ var MapErrorStatusCode = map[string]int{
 	ErrTokenInvalid.Error():         http.StatusUnauthorized,
 	ErrTokenMalformed.Error():       http.StatusUnauthorized,
 	ErrUserNotFound.Error():         http.StatusNotFound,
+	ErrOcurred.Error():              http.StatusInternalServerError,
 }

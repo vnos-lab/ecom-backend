@@ -23,6 +23,5 @@ type CreateProductRequest struct {
 	IsNew       bool     `json:"is_new" binding:"required"`
 	// CategoryID int      `json:"category_id" binding:"required"`
 	// CampaignID int      `json:"campaign_id" binding:"required"`
-	// TotalSold int    `json:"total_sold" binding:"required"`
 	SKU string `json:"sku" binding:"required"`
 }

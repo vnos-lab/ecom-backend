@@ -7,6 +7,7 @@ import (
 	"ecom/models"
 	"ecom/utils"
 
+	"github.com/pkg/errors"
 	"go.uber.org/zap"
 )
 
@@ -16,7 +17,7 @@ type productRepository struct {
 }
 
 func NewProductRepository(db *db.Database, logger *zap.Logger) domain.ProductRepository {
-	utils.ErrNilDb(db)
+	utils.MustHaveDb(db)
 	return &productRepository{db, logger}
 }
 
@@ -51,8 +52,10 @@ func (p *productRepository) Create(context context.Context, product models.Produ
 
 	err := p.DB.QueryRow(sql, args...).Scan(&product.ID, &product.CreatedAt, &product.UpdatedAt)
 	if err != nil {
-		p.logger.Error("Error when insert product", zap.Error(err))
-		return nil, err
+		return nil, errors.WithStack(err)
 	}
+
+	return nil, errors.New("Not implemented")
+
 	return &product, nil
 }

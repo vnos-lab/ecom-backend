@@ -41,7 +41,15 @@ func (e *GinMiddleware) Logger(zapLogger *zap.Logger) gin.HandlerFunc {
 		method := c.Request.Method
 		statusCode := c.Writer.Status()
 
-		logger := zapLogger.Info
+		l := zapLogger.WithOptions(zap.AddStacktrace(zap.DPanicLevel))
+		logger := l.Info
+
+		if statusCode >= 400 && statusCode < 500 {
+			logger = l.Warn
+		}
+		if statusCode >= 500 {
+			logger = l.Error
+		}
 
 		logger("Request",
 			zap.String("Path", path),
