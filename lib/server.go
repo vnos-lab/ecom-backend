@@ -39,10 +39,10 @@ func NewServer(lifecycle fx.Lifecycle, zap *zap.Logger, config *config.Config, d
 	//instance.Use(gozap.RecoveryWithZap(zap, true))
 
 	instance.Use(middlewares.CORS)
+	instance.Use(middlewares.JWT(config, db))
 	instance.Use(middlewares.Logger(zap))
 	instance.Use(middlewares.ErrorHandler(zap))
 	instance.Use(middlewares.JSONMiddleware)
-	// instance.Use(middlewares.JWT(config, db))
 
 	lifecycle.Append(fx.Hook{
 		OnStart: func(ctx context.Context) error {

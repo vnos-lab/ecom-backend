@@ -7,4 +7,5 @@ var Module = fx.Provide(
 	NewUserService,
 	NewJwtService,
 	NewProductService,
+	NewVariantService,
 )

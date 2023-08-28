@@ -22,6 +22,7 @@ func NewProductController(c *gin.RouterGroup, productService domain.ProductServi
 
 	g := c.Group("/product")
 	g.POST("/create", controller.Create)
+	g.GET("/:id", controller.GetByID)
 
 	return controller
 }
@@ -41,4 +42,16 @@ func (p *ProductController) Create(c *gin.Context) {
 	}
 
 	p.Response(c, http.StatusOK, "Product created successfully", result)
+}
+
+func (p *ProductController) GetByID(c *gin.Context) {
+	id := c.Param("id")
+
+	result, err := p.productService.GetByID(c.Request.Context(), id)
+	if err != nil {
+		p.ResponseError(c, err)
+		return
+	}
+
+	p.Response(c, http.StatusOK, "Product retrieved successfully", result)
 }
