@@ -53,8 +53,7 @@ func (v *ProductVariantController) Update(c *gin.Context) {
 		return
 	}
 
-	id := c.Param("id")
-	uuid, _ := uuid.FromString(id)
+	uuid, _ := uuid.FromString(c.Param("id"))
 
 	result, err := v.variantService.Update(c.Request.Context(), req, uuid)
 	if err != nil {
@@ -66,9 +65,7 @@ func (v *ProductVariantController) Update(c *gin.Context) {
 }
 
 func (v *ProductVariantController) Delete(c *gin.Context) {
-	id := c.Param("id")
-
-	err := v.variantService.Delete(c.Request.Context(), id)
+	err := v.variantService.Delete(c.Request.Context(), c.Param("id"))
 	if err != nil {
 		v.ResponseError(c, err)
 		return

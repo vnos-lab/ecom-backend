@@ -50,9 +50,7 @@ func (p *ProductController) Create(c *gin.Context) {
 }
 
 func (p *ProductController) GetByID(c *gin.Context) {
-	id := c.Param("id")
-
-	result, err := p.productService.GetByID(c.Request.Context(), id)
+	result, err := p.productService.GetByID(c.Request.Context(), c.Param("id"))
 	if err != nil {
 		p.ResponseError(c, err)
 		return
