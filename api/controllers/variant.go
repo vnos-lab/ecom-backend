@@ -1,8 +1,11 @@
 package controller
 
 import (
+	"ecom/api/middlewares"
+	"ecom/api_errors"
 	"ecom/domain"
 	"net/http"
+	"time"
 
 	"github.com/gin-gonic/gin"
 	uuid "github.com/satori/go.uuid"
@@ -15,9 +18,10 @@ type ProductVariantController struct {
 	logger         *zap.Logger
 }
 
-func NewProductVariantController(c *gin.RouterGroup, logger *zap.Logger, variantService domain.ProductVariantService) *ProductVariantController {
+func NewProductVariantController(c *gin.RouterGroup, logger *zap.Logger, variantService domain.ProductVariantService, middleware *middlewares.GinMiddleware) *ProductVariantController {
 	controller := &ProductVariantController{variantService: variantService, logger: logger}
 	g := c.Group("/variant")
+	g.Use(middleware.TimeOut(5*time.Second, api_errors.ErrRequestTimeout))
 
 	g.POST("/", controller.Create)
 	g.PUT("/:id", controller.Update)

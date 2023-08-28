@@ -15,6 +15,7 @@ var (
 	ErrUserNotFound         = errors.New("user not found")
 	ErrOcurred              = errors.New("an error has ocurred")
 	ErrProductNotFound      = errors.New("product not found")
+	ErrRequestTimeout       = errors.New("request timeout")
 )
 
 func GetStatusCode(err error) (int, bool) {
@@ -35,4 +36,5 @@ var MapErrorStatusCode = map[string]int{
 	ErrUserNotFound.Error():         http.StatusNotFound,
 	ErrOcurred.Error():              http.StatusInternalServerError,
 	ErrProductNotFound.Error():      http.StatusNotFound,
+	ErrRequestTimeout.Error():       http.StatusRequestTimeout,
 }

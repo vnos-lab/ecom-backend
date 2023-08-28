@@ -1,8 +1,11 @@
 package controller
 
 import (
+	"ecom/api/middlewares"
+	"ecom/api_errors"
 	"ecom/domain"
 	"net/http"
+	"time"
 
 	"github.com/gin-gonic/gin"
 	"go.uber.org/zap"
@@ -14,13 +17,15 @@ type ProductController struct {
 	logger         *zap.Logger
 }
 
-func NewProductController(c *gin.RouterGroup, productService domain.ProductService, logger *zap.Logger) *ProductController {
+func NewProductController(c *gin.RouterGroup, productService domain.ProductService, logger *zap.Logger, middleware *middlewares.GinMiddleware) *ProductController {
 	controller := &ProductController{
 		productService: productService,
 		logger:         logger,
 	}
 
 	g := c.Group("/product")
+	g.Use(middleware.TimeOut(5*time.Second, api_errors.ErrRequestTimeout))
+
 	g.POST("/create", controller.Create)
 	g.GET("/:id", controller.GetByID)
 

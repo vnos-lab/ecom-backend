@@ -1,8 +1,11 @@
 package controller
 
 import (
+	"ecom/api/middlewares"
+	"ecom/api_errors"
 	"ecom/domain"
 	"net/http"
+	"time"
 
 	"github.com/gin-gonic/gin"
 	"go.uber.org/zap"
@@ -14,12 +17,13 @@ type AuthController struct {
 	logger      *zap.Logger
 }
 
-func NewAuthController(c *gin.RouterGroup, authService domain.AuthService, logger *zap.Logger) *AuthController {
+func NewAuthController(c *gin.RouterGroup, authService domain.AuthService, logger *zap.Logger, middleWare *middlewares.GinMiddleware) *AuthController {
 	controller := &AuthController{
 		authService: authService,
 		logger:      logger,
 	}
 	g := c.Group("/auth")
+	g.Use(middleWare.TimeOut(5*time.Second, api_errors.ErrRequestTimeout))
 	g.POST("/register", controller.Register)
 	g.POST("/login", controller.Login)
 
